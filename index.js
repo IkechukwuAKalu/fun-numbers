@@ -45,5 +45,3 @@ app.use((err, req, res, next) => {
 app.listen(process.env.PORT || LISTEN_PORT, () => {
     console.log('Server up and running');
 });
-
-//console.log(calculation.doCascadeCalc('Add 5 plus 3 divided by 4 multiply by 9 and add 32'));
