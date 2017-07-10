@@ -30,14 +30,14 @@ const START_OP = 'start_op';
 const BEGIN_GAME_RES = [
     'Sure!, I\'m in. Choose a secret number',
     'Play a game? Okay! Choose a secret number',
-    'Alright then. Go ahead and choose a secret number'  
+    'Alright. Go ahead and choose a secret number'
 ];
 
 // Game restart replies
 const RESTART_GAME_RES = [
     'Great! Let\'s play some more. Choose a number',
-    'Okay. Go on and choose a secret number',
-    'I\'m glad! Another round. Choose a number'  
+    'Okay then. Go on and choose a secret number',
+    'I\'m glad! Another round. Choose a number'
 ];
 
 // Session end replies
@@ -184,10 +184,10 @@ function doDivideSecret(startOp, gameCounter, addResult, multiplyResult) {
 function doDivide(startOp, gameCounter, addResult, multiplyResult) {
     let newNumber = util.utils.generateRandomNumber(10);
     // avoid diving by large or odd numbers
-    while(newNumber % 2 != 0) {
+    while(newNumber % 2 !== 0) {
         newNumber = util.utils.generateRandomNumber(10);
     }
-    if (newNumber == 0) newNumber += 2;
+    if (newNumber === 0) newNumber += 2;
     let result = 0;
     if (startOp == ADD_OP) {
         result = addResult/newNumber;
