@@ -1,3 +1,7 @@
+/**
+* This is entry point into the application. Start the server from this file
+*/
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const game = require('./game');
