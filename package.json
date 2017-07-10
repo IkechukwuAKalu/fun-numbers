@@ -1,0 +1,27 @@
+{
+  "name": "fun-numbers",
+  "version": "1.0.0",
+  "description": "A Fun way to play with numbers and perform basic calculations",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Actions on Google",
+    "Numbers",
+    "Play with numbers",
+    "Api.Ai"
+  ],
+  "author": "Ikechukwu A Kalu",
+  "license": "MIT",
+  "engines": {
+    "node": "6.11.0"
+  },
+  "dependencies": {
+    "actions-on-google": "^1.1.1",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mathjs": "^3.14.2"
+  }
+}
