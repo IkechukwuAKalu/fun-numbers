@@ -192,12 +192,12 @@ function performOperation(operation, number1, number2, rawQuery){
  */
 function doCascadeCalc(query) {
     query = query.toLowerCase();
-    query = query.replace(/(add|plus|positive)+/gi, '+'); // addition
-    query = query.replace(/(subtract|minus|negative)+/gi, '-'); // subtraction
-    query = query.replace(/(divide( |d by)|over)+/gi, '/'); // division
-    query = query.replace(/(multiply|times)/gi, '*'); // multiplication
+    query = query.replace(/(add|plus|addition|positive|sum)+/gi, '+'); // addition
+    query = query.replace(/(subtract|subtraction|minus|negative)+/gi, '-'); // subtraction
+    query = query.replace(/(divide( |d by)|over|division)+/gi, '/'); // division
+    query = query.replace(/(multiply|multiplication|times|product)/gi, '*'); // multiplication
     query = query.replace(/(factorial)/gi, '!'); // factorial
-    query = query.replace(/(and|with|to|by| )/gi, ''); // remove unneccessary words
+    query = query.replace(/(and|with|to|by|from|find|calculate|what|is|the|value|of|result|\?|\.|answer|expression| )/gi, ''); // remove unneccessary words
     query = query.replace(/^(!|\/|\*)/gm,'');
     query = query.replace(/(\+|-|\/|\*)$/gm,'');
     let result = 0;
