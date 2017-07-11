@@ -192,8 +192,8 @@ function performOperation(operation, number1, number2, rawQuery){
  */
 function doCascadeCalc(query) {
     query = query.toLowerCase();
-    query = query.replace(/(add|plus)+/gi, '+'); // addition
-    query = query.replace(/(subtract|minus)+/gi, '-'); // subtraction
+    query = query.replace(/(add|plus|positive)+/gi, '+'); // addition
+    query = query.replace(/(subtract|minus|negative)+/gi, '-'); // subtraction
     query = query.replace(/(divide( |d by)|over)+/gi, '/'); // division
     query = query.replace(/(multiply|times)/gi, '*'); // multiplication
     query = query.replace(/(factorial)/gi, '!'); // factorial
