@@ -198,7 +198,7 @@ function doCascadeCalc(query) {
     query = query.replace(/(multiply|times)/gi, '*'); // multiplication
     query = query.replace(/(factorial)/gi, '!'); // factorial
     query = query.replace(/(and|with|to|by| )/gi, ''); // remove unneccessary words
-    query = query.replace(/^(\/|\*)/gm,'');
+    query = query.replace(/^(!|\/|\*)/gm,'');
     query = query.replace(/(\+|-|\/|\*)$/gm,'');
     let result = 0;
     try{
