@@ -59,7 +59,7 @@ function doSubtract(num1, num2, rawQuery){
  * @param {*number} num2 the second number
  */
 function doMultiply(num1, num2){
-    num2 = (num2 == 0) ? 1 : num2;
+    num2 = (num2 === 0) ? 1 : num2;
     return num1 * num2;
 }
 
@@ -145,7 +145,7 @@ function doTan(number) {
  * @param {*Number} num2 the second number 
  */
 function doPercentage(num1, num2){
-    if (num2 == 0){
+    if (num2 === 0){
         return (num1/100).toFixed(2);
     }
     return ((num1 * num2)/100).toFixed(2);
@@ -198,7 +198,7 @@ function doCascadeCalc(query) {
     query = query.replace(/(multiply|times)/gi, '*'); // multiplication
     query = query.replace(/(factorial)/gi, '!'); // factorial
     query = query.replace(/(and|with|to|by| )/gi, ''); // remove unneccessary words
-    query = query.replace(/^(\+|-|\/|\*)/gm,'');
+    query = query.replace(/^(\/|\*)/gm,'');
     query = query.replace(/(\+|-|\/|\*)$/gm,'');
     let result = 0;
     try{
