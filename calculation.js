@@ -4,13 +4,18 @@
  */
 
 const util = require('./util');
+const game = require('./game');
 const apiAi = require('actions-on-google').ApiAiApp;
 const mathjs = require('mathjs');
 
 // Contexts and Lifespans
 const CONTEXT_CALCULATE = 'calculate';
+const CONTEXT_CALCULATE_AGAIN = "calculate_followup";
 const DEFAULT_LIFESPAN = 4;
 const END_LIFESPAN = 0;
+
+// Know when to end the session
+const END_SESSION_KEY = 'end_session_key';
 
 // Supported operations
 const OP_ADD = 'add';
@@ -30,14 +35,14 @@ const OP_PERCENTAGE = 'percentage';
 const INIT_REPLIES = [
     'Okay, tell me what to calculate',
     'Okay then, what should I calculate?',
-    'Sure! what should I calculate for you?'
+    'Alright! what should I calculate for you?'
 ];
 
 // Post answer replies
-const ANSWER_FOLLOWUP_REPLIES = [
+const CALC_AGAIN_REPLIES = [
     'Do you want to perform another calculation?',
     'Do you want to Calculate some more?',
-    'You have some more calculations?'
+    'You have some more calculations to do?'
 ];
 
 // Calculate again followup - no
@@ -49,7 +54,7 @@ const TRY_GAME_REPLIES = [
 
 // End of session replies
 const END_SESSION_REPLIES = [
-    'Okay! Have a nice time',
+    'Thanks for using Fun Numbers. Have a nice time',
     'You can also try a game next time. Bye!',
     'You can always do your basic calculations with me. See you next time!'
 ];
@@ -243,7 +248,7 @@ module.exports.initCalculation = (req, res, next) => {
     let apiApp = new apiAi({ request: req, response: res });
     apiApp.setContext(CONTEXT_CALCULATE, DEFAULT_LIFESPAN, {});
     let response = INIT_REPLIES[util.utils.generateRandomNumber(INIT_REPLIES.length)];
-    util.utils.buildRichResponse(apiApp, response, response, []);
+    util.utils.buildRichResponse(apiApp, response, response, [], true);
 };
 
 /**
@@ -251,9 +256,13 @@ module.exports.initCalculation = (req, res, next) => {
  */
 module.exports.calculate = (req, res, next) => {
     let apiApp = new apiAi({ request: req, response: res });
-    apiApp.setContext(CONTEXT_CALCULATE, DEFAULT_LIFESPAN, {});
+    // Add a counter to know when to end session or ask to play game
+    let params = {};
+    params[END_SESSION_KEY] = '0';
+    apiApp.setContext(CONTEXT_CALCULATE, END_LIFESPAN, {});
+    apiApp.setContext(CONTEXT_CALCULATE_AGAIN, DEFAULT_LIFESPAN, params);
     let rawQuery = req.body.result.resolvedQuery;
-    let ops =  req.body.result.parameters.calculations; // an array of calculation entities
+    let ops =  req.body.result.parameters.calculations; // array of calculation entities
     let calResult = 0;
     if (ops.length == 1) {
         let operation = ops[0];
@@ -263,6 +272,7 @@ module.exports.calculate = (req, res, next) => {
     } else {
         calResult = doCascadeCalc(rawQuery);
     }
+    
     let response = '';
     if(typeof calResult == 'object' && calResult.error != null){
         response = calResult.error;
@@ -270,6 +280,47 @@ module.exports.calculate = (req, res, next) => {
         response = (calResult != undefined) ? 'The answer is ' + calResult 
             : `Unable to do ${apiApp.getRawInput()}`;
     }
+    response += '. ' + CALC_AGAIN_REPLIES[util.utils.generateRandomNumber(CALC_AGAIN_REPLIES.length)];
+    util.utils.buildRichResponse(apiApp, response, response, ['Yes', 'No'], true);
+};
 
-    util.utils.buildRichResponse(apiApp, response, response, []);
+
+/**
+ * Performs another calculation or begins the game session
+ */
+module.exports.calculateAgain = (req, res, next) => {
+    let apiApp = new apiAi({ request: req, response: res });
+    let counter = Number(apiApp.getContextArgument(CONTEXT_CALCULATE_AGAIN, END_SESSION_KEY).value);
+    if (counter === 0) {
+        apiApp.setContext(CONTEXT_CALCULATE, DEFAULT_LIFESPAN, {});
+        let response = INIT_REPLIES[util.utils.generateRandomNumber(INIT_REPLIES.length)];
+        util.utils.buildRichResponse(apiApp, response, response, [], true);
+    } else {
+        apiApp.setContext(CONTEXT_CALCULATE_AGAIN, END_LIFESPAN, {});
+        // Init and begin the game session
+        apiApp.setContext(game.playGameContext, DEFAULT_LIFESPAN, {});
+        game.beginGame(req, res, next);
+    }
+};
+
+
+/**
+ * Ends this calculation session
+ */
+module.exports.endSession = (req, res, next) => {
+    let apiApp = new apiAi({ request: req, response: res });
+    let counter = Number(apiApp.getContextArgument(CONTEXT_CALCULATE_AGAIN, END_SESSION_KEY).value);
+    if(counter === 0){
+        let response = TRY_GAME_REPLIES[util.utils.generateRandomNumber(TRY_GAME_REPLIES.length)];
+        // Add the countext variables
+        let params = {};
+        params[END_SESSION_KEY] = '1';
+        apiApp.setContext(CONTEXT_CALCULATE_AGAIN, DEFAULT_LIFESPAN, params);
+        util.utils.buildRichResponse(apiApp, response, response, ['Yes', 'No'], true);
+    } else {
+        // Go ahead and end the session
+        let response = END_SESSION_REPLIES[util.utils.generateRandomNumber(END_SESSION_REPLIES.length)];
+        apiApp.setContext(CONTEXT_CALCULATE_AGAIN, END_LIFESPAN, {});
+        util.utils.buildRichResponse(apiApp, response, response, [], false);
+    }
 };
