@@ -191,20 +191,24 @@ function performOperation(operation, number1, number2, rawQuery){
  * @param {*String} query the raw query string
  */
 function doCascadeCalc(query) {
+    if(query.length > 200) {
+        return {error: 'Sorry, the input is too long'}; // prevent catastrophic backtracking in RegEx
+    }
+
     query = query.toLowerCase();
     query = query.replace(/(add|plus|addition|positive|sum)+/gi, '+'); // addition
     query = query.replace(/(subtract|subtraction|minus|negative)+/gi, '-'); // subtraction
-    query = query.replace(/(divide( |d by)|over|division)+/gi, '/'); // division
-    query = query.replace(/(multiply|multiplication|times|product)/gi, '*'); // multiplication
+    query = query.replace(/(divided|divided by|over|division)+/gi, '/'); // division
+    query = query.replace(/(multiply|multiplied by|multiplication|times|product)/gi, '*'); // multiplication
     query = query.replace(/(factorial)/gi, '!'); // factorial
     query = query.replace(/(and|with|to|by|from|find|calculate|what|is|the|value|of|result|\?|\.|answer|expression| )/gi, ''); // remove unneccessary words
-    query = query.replace(/^(!|\/|\*)/gm,'');
-    query = query.replace(/(\+|-|\/|\*)$/gm,'');
+    query = query.replace(/^(!|\/|\*)/gm,''); // remove all operators except add and minus
+    query = query.replace(/(\+|-|\/|\*)$/gm,''); // remove all operators except factorial
     let result = 0;
     try{
         result = mathjs.eval(query);
     }catch(err){
-        result = ' -1';
+        result = undefined;
     }
 
     return result;
@@ -227,7 +231,7 @@ module.exports.calculate = (req, res, next) => {
     let apiApp = new apiAi({ request: req, response: res });
     apiApp.setContext(CONTEXT_CALCULATE, DEFAULT_LIFESPAN, {});
     let rawQuery = req.body.result.resolvedQuery;
-    let ops =  req.body.result.parameters.calculations;
+    let ops =  req.body.result.parameters.calculations; // an array of calculation entities
     let calResult = 0;
     if (ops.length == 1) {
         let operation = ops[0];
@@ -237,10 +241,13 @@ module.exports.calculate = (req, res, next) => {
     } else {
         calResult = doCascadeCalc(rawQuery);
     }
-    let response = (calResult != undefined) ? 'The answer is ' + calResult 
-        : `Unable to do ${apiApp.getRawInput()}`;
+    let response = '';
+    if(typeof calResult == 'object' && calResult.error != null){
+        response = calResult.error;
+    } else {
+        response = (calResult != undefined) ? 'The answer is ' + calResult 
+            : `Unable to do ${apiApp.getRawInput()}`;
+    }
+
     util.utils.buildRichResponse(apiApp, response, response, []);
 };
-
-
-exports.doCascadeCalc = doCascadeCalc;
