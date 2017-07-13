@@ -47,9 +47,9 @@ const CALC_AGAIN_REPLIES = [
 
 // Calculate again followup - no
 const TRY_GAME_REPLIES = [
-    'What about a game; want to try it?',
+    'What about a game; Do you want to try it?',
     'Okay then. Do you want to play a game?',
-    'Should we try a game?'
+    'Alright. Should we try a game?'
 ];
 
 // End of session replies

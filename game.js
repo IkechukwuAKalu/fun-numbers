@@ -276,7 +276,7 @@ module.exports.beginGame = (req, res, next) => {
     let params = getDefaultParams();
     apiApp.setContext(CONTEXT_PLAY_GAME, DEFAULT_LIFESPAN, params);
     let response = BEGIN_GAME_RES[util.utils.generateRandomNumber(BEGIN_GAME_RES.length)];
-    util.utils.buildRichResponse(apiApp, response, response, [], true);
+    util.utils.buildRichResponse(apiApp, response, response, ['Done'], true);
 };
 
 /**
