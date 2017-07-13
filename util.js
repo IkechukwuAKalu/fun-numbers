@@ -12,7 +12,7 @@ function buildRichResponse(aiApp, speech, text, suggestions, last){
             .addSimpleResponse(text)
             .addSuggestions(suggestions));
     } else {
-        (last) ? aiApp.ask(`${speech}`, []) : aiApp.tell(`${speech}`, []);
+        (last) ? aiApp.ask(`${speech}`, []) : aiApp.tell(`${speech}`);
     }
 }
 

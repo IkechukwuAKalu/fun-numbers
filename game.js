@@ -264,7 +264,7 @@ module.exports.playGame = (req, res, next) => {
     params[START_OP] = startOp;
     apiApp.setContext(CONTEXT_PLAY_GAME, DEFAULT_LIFESPAN, params);
     // Return speech response
-    util.utils.buildRichResponse(apiApp, response[1], response[1], [], true);
+    util.utils.buildRichResponse(apiApp, response[1], response[1], ['Done'], true);
 };
 
 /**
