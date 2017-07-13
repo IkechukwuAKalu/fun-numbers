@@ -28,20 +28,30 @@ const OP_PERCENTAGE = 'percentage';
 
 // The initialization replies
 const INIT_REPLIES = [
-    'Tell me what to calculate',
-    'Sure! what should I calculate for you'
+    'Okay, tell me what to calculate',
+    'Okay then, what should I calculate?',
+    'Sure! what should I calculate for you?'
 ];
 
 // Post answer replies
 const ANSWER_FOLLOWUP_REPLIES = [
-    'You want to perform another calculation or play a game?',
-    'Calculate some more or try a game?',
+    'Do you want to perform another calculation?',
+    'Do you want to Calculate some more?',
+    'You have some more calculations?'
+];
+
+// Calculate again followup - no
+const TRY_GAME_REPLIES = [
+    'What about a game; want to try it?',
+    'Okay then. Do you want to play a game?',
+    'Should we try a game?'
 ];
 
 // End of session replies
 const END_SESSION_REPLIES = [
-    'Okay!. Have a nice time',
-    'You can always use me to perform your basic calculations. See you next time!'
+    'Okay! Have a nice time',
+    'You can also try a game next time. Bye!',
+    'You can always do your basic calculations with me. See you next time!'
 ];
 
 /**
