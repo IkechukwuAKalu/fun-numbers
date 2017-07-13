@@ -4,14 +4,15 @@
  * @param {String} speech the text to be read out
  * @param {String} text the text to display
  * @param {Array} suggestions a String array of suggestions
+ * @param {Boolean} last true if no response is required
  */
-function buildRichResponse(aiApp, speech, text, suggestions){
+function buildRichResponse(aiApp, speech, text, suggestions, last){
     if (aiApp.hasSurfaceCapability(aiApp.SurfaceCapabilities.SCREEN_OUTPUT)){
         aiApp.ask(aiApp.buildRichResponse()
             .addSimpleResponse(text)
             .addSuggestions(suggestions));
     } else {
-        aiApp.ask(`${speech}`, []);
+        (last) ? aiApp.tell(`${speech}`, []) : aiApp.ask(`${speech}`, []);
     }
 }
 

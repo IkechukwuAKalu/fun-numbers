@@ -226,7 +226,7 @@ function endGame(apiApp, startOp, gameCounter, addResult, multiplyResult) {
     let params = getDefaultParams();
     apiApp.setContext(CONTEXT_PLAY_GAME, END_LIFESPAN, params);
     apiApp.setContext(CONTEXT_PLAY_AGAIN, DEFAULT_LIFESPAN, {});
-    util.utils.buildRichResponse(apiApp, response, response, ['Yes', 'No']);
+    util.utils.buildRichResponse(apiApp, response, response, ['Yes', 'No'], false);
 }
 
 /**
@@ -264,7 +264,7 @@ module.exports.playGame = (req, res, next) => {
     params[START_OP] = startOp;
     apiApp.setContext(CONTEXT_PLAY_GAME, DEFAULT_LIFESPAN, params);
     // Return speech response
-    util.utils.buildRichResponse(apiApp, response[1], response[1], []);
+    util.utils.buildRichResponse(apiApp, response[1], response[1], [], false);
 };
 
 /**
@@ -276,7 +276,7 @@ module.exports.beginGame = (req, res, next) => {
     let params = getDefaultParams();
     apiApp.setContext(CONTEXT_PLAY_GAME, DEFAULT_LIFESPAN, params);
     let response = BEGIN_GAME_RES[util.utils.generateRandomNumber(BEGIN_GAME_RES.length)];
-    util.utils.buildRichResponse(apiApp, response, response, []);
+    util.utils.buildRichResponse(apiApp, response, response, [], false);
 };
 
 /**
@@ -289,7 +289,7 @@ module.exports.playAgain = (req, res, next) => {
     // Add the countext variables
     let params = getDefaultParams();
     apiApp.setContext(CONTEXT_PLAY_GAME, DEFAULT_LIFESPAN, params);
-    util.utils.buildRichResponse(apiApp, response, response, []);
+    util.utils.buildRichResponse(apiApp, response, response, [], false);
 };
 
 /**
@@ -302,5 +302,5 @@ module.exports.endSession = (req, res, next) => {
     let params = getDefaultParams();
     apiApp.setContext(CONTEXT_PLAY_AGAIN, END_LIFESPAN, {});
     apiApp.setContext(CONTEXT_PLAY_GAME, END_LIFESPAN, params);
-    util.utils.buildRichResponse(apiApp, response, response, []);
+    util.utils.buildRichResponse(apiApp, response, response, [], true);
 };

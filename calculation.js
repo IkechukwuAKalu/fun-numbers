@@ -32,6 +32,18 @@ const INIT_REPLIES = [
     'Sure! what should I calculate for you'
 ];
 
+// Post answer replies
+const ANSWER_FOLLOWUP_REPLIES = [
+    'You want to perform another calculation or play a game?',
+    'Calculate some more or try a game?',
+];
+
+// End of session replies
+const END_SESSION_REPLIES = [
+    'Okay!. Have a nice time',
+    'You can always use me to perform your basic calculations. See you next time!'
+];
+
 /**
  * Performs an addition
  * @param {*number} num1 the first number
