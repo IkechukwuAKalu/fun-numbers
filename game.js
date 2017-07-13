@@ -197,6 +197,9 @@ function doDivide(startOp, gameCounter, addResult, multiplyResult) {
     return [result, 'Divide your result by ' + newNumber];
 }
 
+/**
+ * Initializes all varibles to their default states
+ */
 function getDefaultParams(){
     let params = {};
     params[COUNTER] = 1;
