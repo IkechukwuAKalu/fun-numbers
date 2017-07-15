@@ -4,7 +4,7 @@
  */
 
 const util = require('./util');
-const game = require('./game');
+const game = require('./game').beginGame;
 const apiAi = require('actions-on-google').ApiAiApp;
 const mathjs = require('mathjs');
 
@@ -41,7 +41,7 @@ const INIT_REPLIES = [
 // Post answer replies
 const CALC_AGAIN_REPLIES = [
     'Do you want to perform another calculation?',
-    'Do you want to Calculate some more?',
+    'Do you want to calculate some more?',
     'You have some more calculations to do?'
 ];
 
@@ -248,7 +248,7 @@ module.exports.initCalculation = (req, res, next) => {
     let apiApp = new apiAi({ request: req, response: res });
     apiApp.setContext(CONTEXT_CALCULATE, DEFAULT_LIFESPAN, {});
     let response = INIT_REPLIES[util.utils.generateRandomNumber(INIT_REPLIES.length)];
-    util.utils.buildRichResponse(apiApp, response, response, [], true);
+    util.utils.buildRichResponse(apiApp, response, response, []);
 };
 
 /**
@@ -281,7 +281,7 @@ module.exports.calculate = (req, res, next) => {
             : `Unable to do ${apiApp.getRawInput()}`;
     }
     response += '. ' + CALC_AGAIN_REPLIES[util.utils.generateRandomNumber(CALC_AGAIN_REPLIES.length)];
-    util.utils.buildRichResponse(apiApp, response, response, ['Yes', 'No'], true);
+    util.utils.buildRichResponse(apiApp, response, response, ['Yes', 'No']);
 };
 
 
@@ -296,11 +296,11 @@ module.exports.calculateAgain = (req, res, next) => {
         apiApp.setContext(CONTEXT_CALCULATE_AGAIN, END_LIFESPAN, {});
         apiApp.setContext(CONTEXT_CALCULATE, DEFAULT_LIFESPAN, {});
         let response = INIT_REPLIES[util.utils.generateRandomNumber(INIT_REPLIES.length)];
-        util.utils.buildRichResponse(apiApp, response, response, [], true);
+        util.utils.buildRichResponse(apiApp, response, response, []);
     } else {
         apiApp.setContext(CONTEXT_CALCULATE_AGAIN, END_LIFESPAN, {});
         // Init and begin the game session
-        game.beginGame(req, res, next);
+        game(req, res, next);
     }
 };
 
@@ -317,11 +317,11 @@ module.exports.endSession = (req, res, next) => {
         let params = {};
         params[END_SESSION_KEY] = '1';
         apiApp.setContext(CONTEXT_CALCULATE_AGAIN, DEFAULT_LIFESPAN, params);
-        util.utils.buildRichResponse(apiApp, response, response, ['Yes', 'No'], true);
+        util.utils.buildRichResponse(apiApp, response, response, ['Yes', 'No']);
     } else {
         // Go ahead and end the session
         let response = END_SESSION_REPLIES[util.utils.generateRandomNumber(END_SESSION_REPLIES.length)];
         apiApp.setContext(CONTEXT_CALCULATE_AGAIN, END_LIFESPAN, {});
-        util.utils.buildRichResponse(apiApp, response, response, [], false);
+        res.send(util.utils.buildLastResponse(apiApp, response));
     }
 };
