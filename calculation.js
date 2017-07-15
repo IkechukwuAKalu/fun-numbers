@@ -10,7 +10,7 @@ const mathjs = require('mathjs');
 
 // Contexts and Lifespans
 const CONTEXT_CALCULATE = 'calculate';
-const CONTEXT_CALCULATE_AGAIN = "calculate_followup";
+const CONTEXT_CALCULATE_AGAIN = "calculate_again_followup";
 const DEFAULT_LIFESPAN = 4;
 const END_LIFESPAN = 0;
 
@@ -292,6 +292,8 @@ module.exports.calculateAgain = (req, res, next) => {
     let apiApp = new apiAi({ request: req, response: res });
     let counter = Number(apiApp.getContextArgument(CONTEXT_CALCULATE_AGAIN, END_SESSION_KEY).value);
     if (counter === 0) {
+        // if the user says yes the first time, calculate again but if second play game
+        apiApp.setContext(CONTEXT_CALCULATE_AGAIN, END_LIFESPAN, {});
         apiApp.setContext(CONTEXT_CALCULATE, DEFAULT_LIFESPAN, {});
         let response = INIT_REPLIES[util.utils.generateRandomNumber(INIT_REPLIES.length)];
         util.utils.buildRichResponse(apiApp, response, response, [], true);

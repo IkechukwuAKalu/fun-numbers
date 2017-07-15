@@ -6,7 +6,7 @@
  * @param {Array} suggestions a String array of suggestions
  * @param {Boolean} last true if response is required
  */
-function buildRichResponse(aiApp, speech, text, suggestions, last){console.log(last);
+function buildRichResponse(aiApp, speech, text, suggestions, last){
     if (aiApp.hasSurfaceCapability(aiApp.SurfaceCapabilities.SCREEN_OUTPUT)){
         aiApp.ask(aiApp.buildRichResponse()
             .addSimpleResponse(text)
