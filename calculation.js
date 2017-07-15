@@ -298,7 +298,6 @@ module.exports.calculateAgain = (req, res, next) => {
     } else {
         apiApp.setContext(CONTEXT_CALCULATE_AGAIN, END_LIFESPAN, {});
         // Init and begin the game session
-        apiApp.setContext(game.playGameContext, DEFAULT_LIFESPAN, {});
         game.beginGame(req, res, next);
     }
 };
