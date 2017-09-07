@@ -1,6 +1,8 @@
 # FunNumbers
 
-This is an Actions on Google project using an [Api.Ai](https://api.ai) agent. 
+This is an Actions on Google project using an [Api.Ai](https://api.ai) agent.
+
+Trigger is "Talk to Fun Numbers".
 
 It consists of two parts: A Number Game and A Basic Calculator.
 
