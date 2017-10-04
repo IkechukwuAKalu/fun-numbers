@@ -10,4 +10,4 @@ The ApiAi_Agents folder contains the Api.Ai agent which you can restore you proj
 
 You can extend the [Project](https://gitlab.com/ikechukwu_a/fun-numbers) to make something complex.
 
-Feel free to send me a mail at [ikechukwuakalu@gmail.com](mailto:ikechukwuakalu@gmail.com) or follow me on [Twitter](https://twitter.com/ikechukwuakalu)
+Feel free to follow me on [Twitter](https://twitter.com/ikechukwuakalu)
